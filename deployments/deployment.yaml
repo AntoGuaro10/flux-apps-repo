@@ -4,7 +4,6 @@ metadata:
   labels:
     app: nginx-flux
   name: nginx-flux
-  namespace: nginx-flux-ns
 spec:
   replicas: 1
   revisionHistoryLimit: 10
