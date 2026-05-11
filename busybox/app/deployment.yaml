@@ -17,6 +17,9 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '80'
       labels:
         app: busybox-flux
     spec:

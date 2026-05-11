@@ -19,6 +19,9 @@ spec:
     metadata:
       labels:
         app: nginx-flux
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '80'
     spec:
       containers:
       - image: nginx:1.29.0
