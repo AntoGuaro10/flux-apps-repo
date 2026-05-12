@@ -9,3 +9,6 @@ resources:
   - ne-daemonset.yaml
   - ne-service.yaml
   - ne-rbac.yaml
+  - grafana-deployment.yaml
+  - grafana-service.yaml
+  - grafana-cm.yaml
