@@ -6,3 +6,6 @@ resources:
   - service.yaml
   - prometheus-configmap.yaml
   - prometheus-rbac.yaml
+  - ne-daemonset.yaml
+  - ne-service.yaml
+  - ne-rbac.yaml
