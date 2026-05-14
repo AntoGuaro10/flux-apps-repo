@@ -6,9 +6,9 @@ resources:
   - service.yaml
   - prometheus-configmap.yaml
   - prometheus-rbac.yaml
-  - ne-daemonset.yaml
-  - ne-service.yaml
-  - ne-rbac.yaml
+#  - ne-daemonset.yaml
+#  - ne-service.yaml
+#  - ne-rbac.yaml
   - grafana-deployment.yaml
   - grafana-service.yaml
   - grafana-cm.yaml
