@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-backend
+  namespace: gitops-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal-backend
+  template:
+    metadata:
+      labels:
+        app: portal-backend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      containers:
+      - name: backend
+        image: ghcr.io/antoguaro10/portal-backend:1.0
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: ghcr-credential
+              key: token
+        - name: GITHUB_OWNER
+          value: "AntoGuaro10"
+        - name: GITHUB_REPO
+          value: ""
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1024Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-backend
+  namespace: gitops-portal
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '8080'
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: portal-backend
