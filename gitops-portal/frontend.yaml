@@ -23,7 +23,7 @@ spec:
         runAsGroup: 101
       containers:
       - name: frontend
-        image: ghcr.io/antoguaro10/portal-frontend:1.0
+        image: ghcr.io/antoguaro10/portal-frontend:2.0
         ports:
         - containerPort: 8080
           name: http
@@ -33,6 +33,10 @@ spec:
           capabilities:
             drop:
             - ALL
+        volumeMounts:
+        - name: portal-frontend-nginx-config
+          mountPath: /etc/nginx/conf.d/
+          readOnly: true
         resources:
           limits:
             cpu: 200m
@@ -40,6 +44,10 @@ spec:
           requests:
             cpu: 50m
             memory: 128Mi
+      volumes:
+        - name: portal-frontend-nginx-config
+          configMap:
+            name: portal-frontend-nginx-config
 ---
 apiVersion: v1
 kind: Service
@@ -58,3 +66,29 @@ spec:
     name: http
   selector:
     app: portal-frontend
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-frontend-nginx-config
+  namespace: gitops-portal
+data:
+  default.conf: |
+    server {
+        listen 8080;
+        server_name localhost;
+
+        location / {
+            root /usr/share/nginx/html;
+            index index.html;
+            try_files $uri $uri/ /index.html;
+        }
+
+        location /api/ {
+            proxy_pass http://backend-service.gitops-portal.svc.cluster.local:8080/api/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
