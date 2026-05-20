@@ -4,7 +4,7 @@ metadata:
   name: portal-backend
   namespace: gitops-portal
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: portal-backend
@@ -25,7 +25,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: backend
-        image: ghcr.io/antoguaro10/portal-backend:1.0
+        image: ghcr.io/antoguaro10/portal-backend:2.0
         ports:
         - containerPort: 8080
           name: http
@@ -38,7 +38,7 @@ spec:
         - name: GITHUB_OWNER
           value: "AntoGuaro10"
         - name: GITHUB_REPO
-          value: ""
+          value: "argocd-with-flux"
         resources:
           limits:
             cpu: 300m
