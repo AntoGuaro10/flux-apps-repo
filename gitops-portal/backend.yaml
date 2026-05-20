@@ -25,7 +25,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: backend
-        image: ghcr.io/antoguaro10/portal-backend:2.0
+        image: ghcr.io/antoguaro10/portal-backend:2.1
         ports:
         - containerPort: 8080
           name: http
